@@ -1730,9 +1730,172 @@ boolean joyMoved()
   return false;
 }
 
+void effect0()
+{
+  off(ALL);
+}
+
+void effect1()
+{
+  wow(CENTER,25,400);
+}
+
+void effect2()
+{
+  off(ALL);
+
+  for(int i=0;i<2;i++)
+  {
+    on(BLUE);
+
+    delay(250);
+
+    off(BLUE);
+
+    delay(250);
+    
+  }
+
+  on(BLUE);
+}
+
+void effect3()
+{
+  on(LEFT_SIDE);
+
+  delay(250);
+
+  off(LEFT_SIDE);
+
+  delay(250);
+
+  on(RIGHT_SIDE);
+
+  delay(250);
+
+  off(RIGHT_SIDE);
+
+  delay(250);
+}
+
+void effect4()
+{
+  off(ALL);
+
+    for(int i=0;i<2;i++)
+  {
+    on(RED);
+
+    delay(250);
+
+    off(RED);
+
+    delay(250);
+    
+  }
+
+  on(RED);
+}
+
+void effect5()
+{
+  on(DIAGONAL_UP);
+
+  delay(250);
+
+  off(DIAGONAL_UP);
+
+  delay(250);
+
+  on(DIAGONAL_DOWN);
+
+  delay(250);
+
+  off(DIAGONAL_DOWN);
+
+  delay(250);  
+}
+
+void effect6()
+{
+  for(int i=0;i<2;i++)
+  {
+    on(CENTER);
+
+    delay(250);
+
+    off(CENTER);
+
+    delay(250);
+    
+    on(ALL_GROUPS);
+
+    delay(250);
+
+    off(ALL_GROUPS);
+
+    delay(250);
+  }
+}
+
+void effect7()
+{
+  off(ALL);
+
+  colorCircle(1,250);
+}
+
+void effect8()
+{
+  for(int i=0;i<4;i++)
+  {
+    on(ALL_WHITE);
+
+    delay(150);
+
+    off(ALL_WHITE);
+
+    delay(100);
+  }  
+}
+
+void effect9()
+{
+  off(ALL);
+
+  for(int i=0;i<4;i++)
+  {
+    on(ALL_GROUPS);
+    on(RED);
+
+    delay(150);
+
+    off(ALL_GROUPS);
+    off(RED);
+
+    delay(100);
+  }
+}
+
+void effect10()
+{
+  off(ALL);
+
+  for(int i=0;i<4;i++)
+  {
+    on(ALL);
+
+    delay(150);
+
+    off(ALL);
+
+    delay(100);
+  }
+}
+
 void byNoise()
 {
-  int noiseA = 0, minA = 2000, maxA = 0, rangeA = 0, averageA = 0, th1A = 0, th2A = 0;
+  int noiseA = 0, minA = 2000, maxA = 0, rangeA = 0, offsetA = 0, tenPC = 0;
   int noiseD = 0;
 
   boolean tack = false;
@@ -1741,13 +1904,13 @@ void byNoise()
 
   while(joyMoved());
 
+  int outTicks = 1000;
+
+  cPrint(0,">>> Listening <<<");
+
   while(joyMoved()==false)
   {
      noiseA = analogRead(soundSensorAnalogPin);
-
-     lcd.setCursor(0,0);
-
-    lcd.print(noiseA);
 
     if(noiseA>maxA)
       maxA=noiseA;
@@ -1755,28 +1918,47 @@ void byNoise()
     if(noiseA<minA)
       minA=noiseA;
 
-     cPrint(0,">>> Listening <<<");
+     
      
      noiseD = digitalRead(soundSensorDigitalPin);    
 
+     
+
+     rangeA = maxA - minA;
+
+     outTicks++;
+
+     if(outTicks>1000)
+     {
+
+      cPrint(1,"      ");
+
      lcd.setCursor(7,1);
 
-    lcd.print(noiseA);
+    lcd.print(rangeA);
      
-     delay(20);
+     delay(1);
 
-    cPrint(1,"      ");
+    outTicks=0;
+
+     }
   }
+
+  cPrint(1,"      ");
 
   cute.play(S_CONNECTION);
 
   rangeA = maxA - minA;
 
-   averageA = minA + rangeA / 4;
+  offsetA = minA + rangeA / 2;
 
-   th1A = minA + (rangeA / 5) * 4;
+  tenPC = (maxA - offsetA) / 10;
 
-   th2A = minA + (rangeA / 9) * 8;
+   //averageA = minA + rangeA / 4;
+
+   //th1A = minA + (rangeA / 5) * 4;
+
+   //th2A = minA + (rangeA / 9) * 8;
 
    /*lcd.setCursor(0,0);
 
@@ -1812,7 +1994,7 @@ void byNoise()
 
    lcd.setCursor(6,1);
 
-   lcd.print(averageA);
+   lcd.print(offsetA);
 
    lcd.setCursor(12,1);
 
@@ -1830,58 +2012,17 @@ void byNoise()
    {
       noiseA = analogRead(soundSensorAnalogPin);
 
-      if(noiseA<averageA) 
-      {
-        off(ALL);
-        delay(100);
-      } else
-      if(noiseA<th1A)
-      {
-        on(currentColor);
-
-        colTicks++;
-
-        if(colTicks>maxColTicks)
-        {
-          
-          colTicks=0;
-          off(currentColor);
-          currentColor++;
-          if(currentColor>BLUE)
-            currentColor=YELLOW;
-          on(currentColor);
-        }
-        
-        on(CENTER);
-        delay(100);
-        off(CENTER);
-      } else
-      if(noiseA<th2A)
-      {
-        
-        tack=!tack;
-
-        if(tack) on(DIAGONAL_DOWN); else
-                  on(DIAGONAL_UP);
-
-        delay(100);
-
-        if(tack) off(DIAGONAL_DOWN); else
-                  off(DIAGONAL_UP);
-
-        
-      } else
-      if(noiseA<maxA)
-      {
-        on(ALL_WHITE);
-        delay(100);
-        off(ALL_WHITE);
-      } else
-      {
-        on(ALL);
-        delay(100);
-        off(ALL);
-      }
+      if(noiseA<offsetA) effect0(); else
+      if(noiseA<(offsetA+tenPC)) effect1(); else
+      if(noiseA<(offsetA+tenPC*2)) effect2(); else
+      if(noiseA<(offsetA+tenPC*3)) effect3(); else
+      if(noiseA<(offsetA+tenPC*4)) effect4(); else
+      if(noiseA<(offsetA+tenPC*5)) effect5(); else
+      if(noiseA<(offsetA+tenPC*6)) effect6(); else
+      if(noiseA<(offsetA+tenPC*7)) effect7(); else
+      if(noiseA<(offsetA+tenPC*8)) effect8(); else
+      if(noiseA<(offsetA+tenPC*9)) effect9(); else
+      effect10();
    }
 
    //cute.play(S_CONNECTION);
