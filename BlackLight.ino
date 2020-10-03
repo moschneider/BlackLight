@@ -1818,24 +1818,48 @@ void effect5()
 
 void effect6()
 {
-  for(int i=0;i<2;i++)
-  {
-    on(CENTER);
+  delay(33);
+  
+  on(GROUP1);
 
-    delay(250);
+  delay(150);
 
-    off(CENTER);
+  off(GROUP1);
 
-    delay(250);
-    
-    on(ALL_GROUPS);
+  on(CENTER);
 
-    delay(250);
+  delay(150);
 
-    off(ALL_GROUPS);
+  off(CENTER);
 
-    delay(250);
-  }
+   on(GROUP4);
+
+  delay(150);
+
+  off(GROUP4);
+
+  delay(33);
+
+  on(GROUP2);
+
+  delay(150);
+
+  off(GROUP2);
+
+  on(CENTER);
+
+  delay(150);
+
+  off(CENTER);
+
+   on(GROUP3);
+
+  delay(150);
+
+  off(GROUP3);
+
+  delay(34);
+
 }
 
 void effect7()
@@ -1847,16 +1871,23 @@ void effect7()
 
 void effect8()
 {
-  for(int i=0;i<4;i++)
-  {
-    on(ALL_WHITE);
+    off(ALL);
+  
+    on(YELLOW);
 
-    delay(150);
+    delay(20);
 
-    off(ALL_WHITE);
+    flash(GROUP1,10,12);
 
-    delay(100);
-  }  
+    flash(GROUP2,10,12);    
+
+    flash(GROUP4,10,12);
+
+    flash(GROUP3,10,12);
+
+    delay(20);
+
+    off(ALL);
 }
 
 void effect9()
@@ -1883,13 +1914,13 @@ void effect10()
 
   for(int i=0;i<4;i++)
   {
-    on(ALL);
+    on(ALL_COLOR);
 
-    delay(150);
+    delay(125);
 
-    off(ALL);
+    off(ALL_COLOR);
 
-    delay(100);
+    delay(125);
   }
 }
 
